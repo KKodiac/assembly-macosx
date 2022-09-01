@@ -1,3 +1,6 @@
+%define SYSCALL_WRITE 0x02000004
+%define SYSCALL_EXIT  0x02000001
+
 global    start
           section   .text
 start:
@@ -18,12 +21,12 @@ lineDone:
           cmp       r8, maxlines            ; wait, did we already finish the last line?
           jnl       line                    ; if not, begin writing this line
 done:
-          mov       rax, 0x02000004         ; system call for write
+          mov       rax, SYSCALL_WRITE      ; system call for write
           mov       rdi, 1                  ; file handle 1 is stdout
           mov       rsi, output             ; address of string to output
           mov       rdx, dataSize           ; number of bytes
           syscall                           ; invoke operating system to do the write
-          mov       rax, 0x02000001         ; system call for exit
+          mov       rax, SYSCALL_EXIT       ; system call for exit
           xor       rdi, rdi                ; exit code 0
           syscall                           ; invoke operating system to exit
 
